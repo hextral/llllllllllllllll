@@ -1,5 +1,5 @@
-use windres::Build;
+extern crate embed_resource;
 
 fn main() {
-  Build::new().compile("icon.rc").unwrap();
+  embed_resource::compile("icon.rc");
 }
