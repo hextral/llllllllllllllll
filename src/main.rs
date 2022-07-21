@@ -12,7 +12,7 @@ use rocket::serde::json::Json;
 use rocket::{Build, Rocket};
 use routes::live_client_data;
 use serde::Serialize;
-use std::process;
+use std::{env, process};
 use tray_item::TrayItem;
 use utils::cors::CORS;
 
@@ -34,6 +34,11 @@ fn rocket() -> Rocket<Build> {
 
 #[tokio::main]
 async fn main() {
+  let rocket_port: u16 = match env::var("LLLLLLLLLLLLLLLL_PORT") {
+    Ok(port) => port.parse().unwrap(),
+    Err(_) => 8923,
+  };
+
   let mut tray = TrayItem::new("llllllllllllllll", "llllllllllllllll-icon").unwrap();
 
   tray
@@ -42,7 +47,17 @@ async fn main() {
     })
     .unwrap();
 
-  match rocket().attach(CORS).launch().await {
+  let config = rocket::Config {
+    port: rocket_port,
+    ..Default::default()
+  };
+
+  match rocket()
+    .configure(config) //
+    .attach(CORS) //
+    .launch()
+    .await
+  {
     Ok(_) => (),
     Err(e) => {
       println!("{}", e);
