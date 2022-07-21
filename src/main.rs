@@ -14,6 +14,7 @@ use routes::live_client_data;
 use serde::Serialize;
 use std::process;
 use tray_item::TrayItem;
+use utils::cors::CORS;
 
 #[derive(Debug, Clone, Serialize)]
 struct LlllllllllllllllStatus {
@@ -41,7 +42,7 @@ async fn main() {
     })
     .unwrap();
 
-  match rocket().launch().await {
+  match rocket().attach(CORS).launch().await {
     Ok(_) => (),
     Err(e) => {
       println!("{}", e);
